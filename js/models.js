@@ -83,7 +83,6 @@ class StoryList {
     const story = new Story(response.data.story);
     //add new story instance to beginning of stories array
     this.stories.unshift(story);
-    //I don't understand this line. I don't see where ownStories is created as a function or declared/initialized as a variable, so I'm not sure where the ownStories array is that we're adding to.
     user.ownStories.unshift(story);
 
     return story;
@@ -103,7 +102,6 @@ class StoryList {
       data: { token: user.loginToken }
     });
 
-    //I still don't understand the following three lines of code. What does filtering out the stories that match the storyId for stories, ownStories, and favorites accomplish?
     // filter out the story whose ID we are removing
     this.stories = this.stories.filter(story => story.storyId !== storyId);
 
@@ -243,7 +241,9 @@ class User {
    */
 
   async removeFavorite(story) {
+    //filter out stories that match the storyId to remove them from favorites
     this.favorites = this.favorites.filter(s => s.storyId !== story.storyId);
+    //call function to remove favorite status of story from API
     await this._addOrRemoveFavorite("remove", story);
   }
 
@@ -253,6 +253,7 @@ class User {
    * */
 
   async _addOrRemoveFavorite(newState, story) {
+    //determine whether addFavorite or removeFavorite function has been called based on first parameter (either "add" or "remove"). If add, then use POST method, otherwise DELETE method.
     const method = newState === "add" ? "POST" : "DELETE";
     const token = this.loginToken;
     await axios({

@@ -180,15 +180,17 @@ function putFavoritesListOnPage() {
 async function toggleStoryFavorite(evt) {
   console.debug("toggleStoryFavorite");
 
+  //target is the star icon
   const $tgt = $(evt.target);
-  console.log($tgt);
+  //select the next li up on the DOM from the clicked star
   const $closestLi = $tgt.closest("li");
+  //I don't understand these two lines.
   const storyId = $closestLi.attr("id");
-  const story = storyList.stories.find(s => s.storyId === storyId); //I don't understand this line. Why is it necessary to select the story we're 
+  const story = storyList.stories.find(s => s.storyId === storyId);
 
-  // see if the item is already favorited (checking by presence of star)
+  // see if the item is already favorited (checking by presence of solid star)
   if ($tgt.hasClass("fas")) {
-    // currently a favorite: remove from user's fav list and change star
+    // currently a favorite: remove from user's fav list and change solid star to hollow star
     await currentUser.removeFavorite(story);
     $tgt.closest("i").toggleClass("fas far");
   } else {
@@ -198,4 +200,5 @@ async function toggleStoryFavorite(evt) {
   }
 }
 
+//toggle favorite on clicking star
 $storiesLists.on("click", ".star", toggleStoryFavorite);
